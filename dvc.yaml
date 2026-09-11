@@ -20,16 +20,16 @@ stages:
     outs:
     - data/processed
   train_model:
-    cmd: python src/models/train_model.py
+    cmd: python src/model/train_model.py
     deps:
     - data/processed
-    - src/models/train_model.py
+    - src/model/train_model.py
     outs:
     - models/model.pkl
   model_evaluation:
-    cmd: python src/models/model_evaluation.py
+    cmd: python src/model/model_evaluation.py
     deps:
     - models/model.pkl
-    - src/models/model_evaluation.py
+    - src/model/model_evaluation.py
     metrics:
     - reports/metrics.json

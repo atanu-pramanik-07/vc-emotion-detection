@@ -123,7 +123,7 @@ def save_metrics(metrics: dict, metrics_path: str) -> None:
 def main() -> None:
     try:
         clf = load_model('./models/model.pkl')
-        test_data = load_data('./data/processed/test_bow.csv')
+        test_data = load_data('./data/processed/test_tfidf.csv')
 
         x_test_bow = test_data.iloc[:, 0:-1]
         y_test = test_data.iloc[:, -1]

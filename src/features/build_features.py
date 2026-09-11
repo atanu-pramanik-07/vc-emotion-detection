@@ -3,7 +3,7 @@ import numpy as np
 import os
 import logging
 import yaml
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 # ------------------------------------------------------------------
 # Logging configuration
@@ -62,8 +62,8 @@ def load_data(data_path: str) -> pd.DataFrame:
         raise
 
 
-def apply_bow(train_data: pd.DataFrame, test_data: pd.DataFrame, max_features: int):
-    """Apply Bag of Words (CountVectorizer) to train and test content columns."""
+def apply_tfidf(train_data: pd.DataFrame, test_data: pd.DataFrame, max_features: int):
+    """Apply Tf-idf Vectorizer to train and test content columns."""
     try:
         x_train = train_data['content'].values
         y_train = train_data['sentiment'].values
@@ -71,7 +71,7 @@ def apply_bow(train_data: pd.DataFrame, test_data: pd.DataFrame, max_features: i
         x_test = test_data['content'].values
         y_test = test_data['sentiment'].values
 
-        vectorizer = CountVectorizer(max_features=max_features)
+        vectorizer = TfidfVectorizer(max_features=max_features)
         x_train_bow = vectorizer.fit_transform(x_train)
         x_test_bow = vectorizer.transform(x_test)
 
@@ -100,8 +100,8 @@ def save_data(data_path: str, train_df: pd.DataFrame, test_df: pd.DataFrame) -> 
         raw_data_path = os.path.join(data_path, 'processed')
         os.makedirs(raw_data_path, exist_ok=True)
 
-        train_df.to_csv(os.path.join(raw_data_path, "train_bow.csv"))
-        test_df.to_csv(os.path.join(raw_data_path, "test_bow.csv"))
+        train_df.to_csv(os.path.join(raw_data_path, "train_tfidf.csv"))
+        test_df.to_csv(os.path.join(raw_data_path, "test_tfidf.csv"))
 
         logger.info("Feature data saved successfully to %s", raw_data_path)
     except PermissionError as e:
@@ -123,7 +123,7 @@ def main() -> None:
         train_data = load_data('./data/interim/train_processed.csv')
         test_data = load_data('./data/interim/test_processed.csv')
 
-        train_df, test_df = apply_bow(train_data, test_data, max_features)
+        train_df, test_df = apply_tfidf(train_data, test_data, max_features)
 
         data_path = './data'
         save_data(data_path, train_df, test_df)
